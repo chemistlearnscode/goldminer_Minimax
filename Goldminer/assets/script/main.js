@@ -12,10 +12,13 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        sprite:cc.Sprite,
-        newGame:cc.SpriteFrame,
-        settingFrame:cc.SpriteFrame,
-        rankFrame:cc.SpriteFrame
+        playNow:cc.Button,
+        setting:cc.Button,
+        ranking:cc.Button,
+    },
+
+    onClickStart() {
+        cc.director.loadScene("game");
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -23,7 +26,7 @@ cc.Class({
     // onLoad () {},
 
     start () {
-
+        // cc.log(this.setTable);
     },
 
     // update (dt) {},
