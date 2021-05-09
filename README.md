@@ -2,7 +2,7 @@
 Ngay 1:
 - chuyen trang tu Main sang Game, Rank, Setting
 *MAIN:
-- button : Play Game, Setting, Ranking
+- button : Play Game, Setting, Ranking (DONE)
 *GAME:
 - EditBox: nhap ten user, money
 - Button: Login
@@ -12,4 +12,4 @@ Ngay 1:
 *RANK
 - Scrollview: bang xep hang
 *SETTING
-- Toggle: bat tat nhac
+- Toggle: bat tat nhac (DONE)
