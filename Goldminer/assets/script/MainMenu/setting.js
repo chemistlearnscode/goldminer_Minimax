@@ -7,6 +7,7 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+const Emitter = require('../mEmitter')
 
 cc.Class({
     extends: cc.Component,
@@ -14,22 +15,6 @@ cc.Class({
     properties: {
         ctrmusic:cc.Toggle,
         music: cc.AudioSource,
-    },
-
-    showWindow(){
-        this.node.active = true;
-        this.node.opacity = 0;
-        this.node.scale = 0.2;
-        cc.tween(this.node)
-        .to(0.5,{ scale:1, opacity:255 },{ easing: 'quartInOut'})
-        .start();
-    },
-
-    hideWindow(){
-        cc.tween(this.node)
-        .to(0.5,{ scale:0.2, opacity:0},{ easing: 'quartInOut'})
-        .call(()=>{ this.node.active=false;})
-        .start();
     },
 
     controlMusic(){
@@ -40,9 +25,9 @@ cc.Class({
         }
     },
 
-    onClickStart() {
-        cc.director.loadScene("game");
-    },
+    // onClickStart() {
+    //     cc.director.loadScene("game");
+    // },
 
     // turnOnMusic(){
     //     this.music.play();
