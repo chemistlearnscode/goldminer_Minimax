@@ -13,3 +13,10 @@ Ngay 1:
 - Scrollview: bang xep hang
 *SETTING
 - Toggle: bat tat nhac (DONE)
+
+GamePlay:
+- rotate rope
+- lengthen rope
+- collision
+- pull gold
+- hide gold
