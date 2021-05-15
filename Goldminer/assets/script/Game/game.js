@@ -38,6 +38,8 @@ cc.Class({
             default:50,
             serializable: false,
         },
+        _x:0,
+        _y:0,
         // _iswaitState:false,
         // _time:0
     },
@@ -48,6 +50,8 @@ cc.Class({
         this.rope.height += this._lengthSpeed * dt;
         this.hook.x+=this.hook.angle*this._lengthSpeed * dt
         this.hook.y-= this._lengthSpeed * dt
+        this._x=this.hook.angle*this._lengthSpeed * dt
+        this._y= this._lengthSpeed * dt
         if((this.rope.height>=500)&&(Math.abs(this.hook.x)>=Math.abs(this.hook.angle*500))){
             // this._isRotate = true;
             this.ropeState = status.reduce;
@@ -98,8 +102,34 @@ cc.Class({
         Emitter.instance.registerEvent("withdrawRope", this.withdrawRope.bind(this))
     },
 
-    withdrawRope(){
+    withdrawRope(node){
+        this.takeItem(node);
         this.ropeState= status.reduce;
+    },
+
+    takeItem(node){
+        if(node.group=="gold"){
+            cc.tween(node)
+            .to(2,{x:-1.4,y:106})
+            .call(()=>{
+                node.active=false
+            })
+            .start()
+        } else if(node.group=="diamond"){
+            cc.tween(node)
+            .to(2,{x:-1.4,y:106},{opacity:0})
+            .call(()=>{
+                node.active=false
+            })
+            .start()
+        } else if (node.group=="stone"){
+            cc.tween(node)
+            .to(2,{x:-1.4,y:106},{opacity:0})
+            .call(()=>{
+                node.active=false
+            })
+            .start()
+        }
     },
 
     sendHook(){

@@ -21,10 +21,10 @@ cc.Class({
     // onLoad () {},
 
     start () {
-
     },
     onCollisionEnter: function(other,self){
-        Emitter.instance.emit('withdrawRope')
+        cc.log(other.node.group)
+        Emitter.instance.emit('withdrawRope',other.node)
         // this.ropeState= status.reduce;
         // this.originPosY = this.node.y;
     }, 
