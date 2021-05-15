@@ -18,11 +18,24 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        rope: cc.Sprite,
+        rope: cc.Node,
+        gold: cc.Prefab,
+        diamond: cc.Prefab,
+        rock: cc.Prefab,
+        hook:cc.Node,
         _isRotate: true,
-        _rotateSpeed: 60,
-        _lengthSpeed: 100000,
-        _standardRopeHeight: 50,
+        _rotateSpeed:  {
+            default:60,
+            serializable: false,
+        },
+        _lengthSpeed: {
+            default:100,
+            serializable: false,
+        },
+        _standardRopeHeight:  {
+            default:50,
+            serializable: false,
+        },
         // _iswaitState:false,
         // _time:0
     },
@@ -30,22 +43,26 @@ cc.Class({
     ropeLengthen(dt){
         //When it becomes longer
     if (this.ropeState == status.add) {
-        this.rope.node.height += this._lengthSpeed * dt;
-        if(this.rope.node.height>=500){
+        this.rope.height += this._lengthSpeed * dt;
+        this.hook.x+=this.hook.angle*this._lengthSpeed * dt
+        this.hook.y-= this._lengthSpeed * dt
+        if((this.rope.height>=500)&&(Math.abs(this.hook.x)>=Math.abs(this.hook.angle*500))){
             // this._isRotate = true;
             this.ropeState = status.reduce;
-            cc.log("hihi");
+            cc.log(this.rope);
         }
     } else if (this.ropeState == status.reduce) {
                  //When shortening
-        this.rope.node.height -= this._lengthSpeed * dt;
+        this.rope.height -= this._lengthSpeed * dt;
+        this.hook.y+=this._lengthSpeed * dt;
+        this.hook.x-=this.hook.angle*this._lengthSpeed * dt;
                  //When the length is less than or equal to the initial length
-        if (this.rope.node.height <= this._standardRopeHeight) {
+        if (this.rope.height <= this._standardRopeHeight) {
                          //The rope starts spinning again
             this._isRotate = true;
                          //Reset various attributes
             this.ropeState = status.rotate;
-            this.rope.node.height = this._standardRopeHeight;
+            this.rope.height = this._standardRopeHeight;
             this.node.angle = 0;
             // this.rotateSpeed = 100;
         }
@@ -56,12 +73,12 @@ cc.Class({
         if (!this._isRotate) {
             return;
         }
-        if (this.rope.node.angle >= 85) {
+        if (this.rope.angle >= 85) {
             this._rotateSpeed = -this._rotateSpeed;
-        } else if (this.rope.node.angle <= -85) {
+        } else if (this.rope.angle <= -85) {
             this._rotateSpeed = Math.abs(this._rotateSpeed);
         }
-        this.rope.node.angle += this._rotateSpeed * dt;
+        this.rope   .angle += this._rotateSpeed * dt;
     },
 
 
@@ -70,6 +87,7 @@ cc.Class({
 
     onLoad() {
         // this._isRotate=true;
+        cc.log( cc.director.getCollisionManager())
         this.node.on(cc.Node.EventType.MOUSE_DOWN, this.takeGold, this);
         let manager = cc.director.getCollisionManager();
         manager.enabled = true;
@@ -107,9 +125,12 @@ cc.Class({
     //     // this._isRotate = true;
     // },
 
-
-
-    
+    onCollisionEnter: function(other,self){
+        cc.log(self);
+        cc.log(other);
+        this.ropeState= status.reduce;
+        // this.originPosY = this.node.y;
+    }, 
 
     start() {
         this.ropeState=status.rotate;
