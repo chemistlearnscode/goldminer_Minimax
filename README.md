@@ -18,5 +18,6 @@ GamePlay:
 - rotate rope
 - lengthen rope
 - collision
-- pull gold
+- drag items back
 - hide gold
+- add score
