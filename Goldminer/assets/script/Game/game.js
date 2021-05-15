@@ -14,6 +14,8 @@ const status={
     reduce: 2,
 }
 
+const Emitter = require('mEmitter');
+
 cc.Class({
     extends: cc.Component,
 
@@ -49,7 +51,7 @@ cc.Class({
         if((this.rope.height>=500)&&(Math.abs(this.hook.x)>=Math.abs(this.hook.angle*500))){
             // this._isRotate = true;
             this.ropeState = status.reduce;
-            cc.log(this.rope);
+            // cc.log(this.rope);
         }
     } else if (this.ropeState == status.reduce) {
                  //When shortening
@@ -78,7 +80,7 @@ cc.Class({
         } else if (this.rope.angle <= -85) {
             this._rotateSpeed = Math.abs(this._rotateSpeed);
         }
-        this.rope   .angle += this._rotateSpeed * dt;
+        this.rope.angle += this._rotateSpeed * dt;
     },
 
 
@@ -88,13 +90,19 @@ cc.Class({
     onLoad() {
         // this._isRotate=true;
         cc.log( cc.director.getCollisionManager())
-        this.node.on(cc.Node.EventType.MOUSE_DOWN, this.takeGold, this);
+        this.node.on(cc.Node.EventType.MOUSE_DOWN, this.sendHook, this);
         let manager = cc.director.getCollisionManager();
         manager.enabled = true;
         manager.enabledDebugDraw = true;
+        Emitter.instance = new Emitter();
+        Emitter.instance.registerEvent("withdrawRope", this.withdrawRope.bind(this))
     },
 
-    takeGold(){
+    withdrawRope(){
+        this.ropeState= status.reduce;
+    },
+
+    sendHook(){
         this._isRotate = false;
         // if (this.ropeState == status.add&&this.rope.node.height>=600) {
         //     this.ropeState = status.reduce;
@@ -125,12 +133,13 @@ cc.Class({
     //     // this._isRotate = true;
     // },
 
-    onCollisionEnter: function(other,self){
-        cc.log(self);
-        cc.log(other);
-        this.ropeState= status.reduce;
-        // this.originPosY = this.node.y;
-    }, 
+    // onCollisionEnter: function(other,self){
+    //     cc.log(self);
+    //     cc.log('hi');
+    //     cc.log(other);
+    //     this.ropeState= status.reduce;
+    //     // this.originPosY = this.node.y;
+    // }, 
 
     start() {
         this.ropeState=status.rotate;
