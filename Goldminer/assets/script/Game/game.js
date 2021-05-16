@@ -134,6 +134,11 @@ cc.Class({
     _y: 0,
     _currentLevel: (cc.Float = 1),
     _currentTime: cc.Float,
+    music: cc.AudioSource,
+    ctrmusic: cc.Button,
+    gameOver: cc.Sprite,
+    winGame: cc.Sprite,
+    btnResetGame: cc.Button,
     // _iswaitState:false,
     // _time:0
   },
@@ -283,11 +288,26 @@ cc.Class({
       }
       ranking.push({ username: window.username, score: this._totalScore });
       localStorage.ranking = JSON.stringify(ranking);
-
+      this.showWindow(this.gameOver);
       //hien popup thua
-      console.log("thua");
+      this.console.log("thua");
     }
   },
+
+  showWindow(args) {
+    this._currentPop = args;
+    args.node.active = true;
+    args.node.opacity = 0;
+    args.node.scale = 0.2;
+    cc.tween(args.node)
+      .to(0.5, { scale: 1, opacity: 255 }, { easing: "quartInOut" })
+      .start();
+  },
+
+  resetGame() {
+    cc.director.loadScene("game");
+  },
+
   checkIsMapEnd() {
     if (this.listItems.children.length == 0 || this._currentTime <= 0) {
       return true;
@@ -352,6 +372,9 @@ cc.Class({
   //     this.ropeState= status.reduce;
   //     // this.originPosY = this.node.y;
   // },
+  controlMusic() {
+    this.music.pause();
+  },
 
   start() {
     this.ropeState = status.rotate;
