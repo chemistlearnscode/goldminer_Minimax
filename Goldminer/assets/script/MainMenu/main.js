@@ -7,30 +7,30 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-const Emitter = require('../mEmitter')
+const Emitter = require("mEmitter");
 
 cc.Class({
-    extends: cc.Component,
+  extends: cc.Component,
 
-    properties: {
-        // playNow:cc.Button,
-        // setting:cc.Button,
-        // ranking:cc.Button,
-    },
+  properties: {
+    // playNow:cc.Button,
+    // setting:cc.Button,
+    // ranking:cc.Button,
+  },
 
-    // onClickStart() {
-    //     cc.director.loadScene("game");
-    // },
+  // onClickStart() {
+  //     cc.director.loadScene("game");
+  // },
 
-    // LIFE-CYCLE CALLBACKS:
+  // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-        Emitter.instance= new Emitter();
-    },
+  onLoad() {
+    Emitter.instance = new Emitter();
+  },
 
-    start () {
-        // cc.log(this.setTable);
-    },
+  start() {
+    // cc.log(this.setTable);
+  },
 
-    // update (dt) {},
+  // update (dt) {},
 });

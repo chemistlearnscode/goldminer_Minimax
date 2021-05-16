@@ -9,7 +9,7 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "hook (1)": {
+    "hook": {
       "ver": "1.0.4",
       "uuid": "c2f9387a-4246-49e8-9dcd-adadd9b66ee9",
       "rawTextureUuid": "dbf42be0-529b-4c93-8b93-63a6a12a521a",

@@ -7,39 +7,39 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
-const Emitter = require('../mEmitter')
+const Emitter = require("mEmitter");
 
 cc.Class({
-    extends: cc.Component,
+  extends: cc.Component,
 
-    properties: {
-        ctrmusic:cc.Toggle,
-        music: cc.AudioSource,
-    },
+  properties: {
+    ctrmusic: cc.Toggle,
+    music: cc.AudioSource,
+  },
 
-    controlMusic(){
-        if(this.ctrmusic.isChecked==false){
-            this.music.pause();
-        }else{
-            this.music.play();
-        }
-    },
+  controlMusic() {
+    if (this.ctrmusic.isChecked == false) {
+      this.music.pause();
+    } else {
+      this.music.play();
+    }
+  },
 
-    // onClickStart() {
-    //     cc.director.loadScene("game");
-    // },
+  // onClickStart() {
+  //     cc.director.loadScene("game");
+  // },
 
-    // turnOnMusic(){
-    //     this.music.play();
-    // },
+  // turnOnMusic(){
+  //     this.music.play();
+  // },
 
-    // LIFE-CYCLE CALLBACKS:
+  // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+  // onLoad () {},
 
-    start () {
-        // cc.log(this.ctrmusic);
-    },
+  start() {
+    // cc.log(this.ctrmusic);
+  },
 
-    // update (dt) {},
+  // update (dt) {},
 });

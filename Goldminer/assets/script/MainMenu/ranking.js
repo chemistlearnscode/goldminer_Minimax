@@ -44,6 +44,7 @@ cc.Class({
     if (listData) {
       listData = JSON.parse(listData);
       listData = listData.sort((x, y) => (+x.score > +y.score ? -1 : 1));
+      listData = listData.slice(0, 19);
       listData.forEach((item, i) => {
         console.log(item);
         let object = cc.instantiate(this.rankItem);

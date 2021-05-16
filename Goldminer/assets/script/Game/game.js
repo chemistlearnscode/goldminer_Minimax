@@ -16,34 +16,87 @@ const status = {
 
 const map1 = {
   posGold: [
-    { x: 1, y: 2, score: 100, scale: 1 },
-    { x: 100, y: -300, score: 100, scale: 0.5 },
+    { x: 0, y: 0, score: 100, scale: 1 },
+    { x: -400, y: -300, score: 100, scale: 0.5 },
+    { x: 80, y: -300, score: 100, scale: 1.5 },
   ],
   posDiamond: [
-    { x: 100, y: 200, score: 100, scale: 2 },
-    { x: -100, y: -100, score: 100, scale: 3 },
+    { x: 100, y: 50, score: 200, scale: 1 },
+    { x: -100, y: -100, score: 200, scale: 1 },
   ],
   posStone: [
-    { x: -300, y: -200, score: 100, scale: 3 },
-    { x: 150, y: -100, score: 100, scale: 4 },
+    { x: -300, y: -200, score: 10, scale: 1 },
+    { x: 280, y: -100, score: 20, scale: 2 },
   ],
   target: 100,
   totalTime: 15,
 };
 const map2 = {
   posGold: [
-    { x: 1, y: 200, score: 100, scale: 1 },
-    { x: 100, y: -300, score: 100, scale: 0.5 },
+    { x: 1, y: 20, score: 100, scale: 1 },
+    { x: 100, y: -300, score: 50, scale: 0.5 },
   ],
   posDiamond: [
-    { x: 100, y: 200, score: 100, scale: 2 },
-    { x: -100, y: -100, score: 100, scale: 3 },
+    { x: 100, y: -200, score: 200, scale: 1 },
+    { x: -100, y: -100, score: 200, scale: 1 },
   ],
   posStone: [
-    { x: -300, y: -200, score: 100, scale: 3 },
-    { x: 150, y: -100, score: 100, scale: 4 },
+    { x: -300, y: -200, score: 10, scale: 1 },
+    { x: 150, y: -100, score: 20, scale: 2 },
   ],
   target: 300,
+  totalTime: 10,
+};
+const map3 = {
+  posGold: [
+    { x: 300, y: -20, score: 100, scale: 1 },
+    { x: -1, y: -200, score: 50, scale: 0.5 },
+  ],
+  posDiamond: [
+    { x: 200, y: -200, score: 200, scale: 1 },
+    { x: -280, y: -200, score: 200, scale: 1 },
+  ],
+  posStone: [
+    { x: -150, y: 50, score: 10, scale: 1 },
+    { x: 270, y: -150, score: 20, scale: 2 },
+    { x: 0, y: 0, score: 30, scale: 2.2 },
+  ],
+  target: 400,
+  totalTime: 10,
+};
+const map4 = {
+  posGold: [
+    { x: 0, y: 20, score: 100, scale: 1 },
+    { x: 100, y: -300, score: 100, scale: 0.5 },
+    { x: 320, y: -50, score: 200, scale: 1.5 },
+  ],
+  posDiamond: [
+    { x: 100, y: -150, score: 200, scale: 1 },
+    { x: -100, y: -100, score: 200, scale: 1 },
+    { x: -180, y: -250, score: 100, scale: 0.5 },
+  ],
+  posStone: [
+    { x: -300, y: -200, score: 10, scale: 1 },
+    { x: 150, y: -100, score: 20, scale: 2 },
+  ],
+  target: 500,
+  totalTime: 10,
+};
+const map5 = {
+  posGold: [
+    { x: 250, y: -70, score: 100, scale: 1 },
+    { x: -100, y: -300, score: 50, scale: 0.75 },
+    { x: 180, y: -250, score: 150, scale: 1.5 },
+  ],
+  posDiamond: [
+    { x: 50, y: -150, score: 100, scale: 1 },
+    { x: -150, y: -100, score: 100, scale: 1 },
+  ],
+  posStone: [
+    { x: -300, y: -200, score: 10, scale: 1 },
+    { x: 0, y: 0, score: 20, scale: 2 },
+  ],
+  target: 600,
   totalTime: 10,
 };
 const Emitter = require("mEmitter");
@@ -62,6 +115,8 @@ cc.Class({
     timer: cc.ProgressBar,
     _totalScore: (cc.Float = 0),
     totalScore: cc.Label,
+    // _currentTarget: cc.Float,
+    target: cc.Label,
     _isRotate: true,
     _rotateSpeed: {
       default: 60,
@@ -92,10 +147,20 @@ cc.Class({
       case 2:
         map = map2;
         break;
+      case 3:
+        map = map3;
+        break;
+      case 4:
+        map = map4;
+        break;
+      case 5:
+        map = map5;
+        break;
       default:
         break;
     }
-    const { posGold, posDiamond, posStone, totalTime } = map;
+    const { posGold, posDiamond, posStone, target, totalTime } = map;
+    this.target.string = target;
     this._currentTime = totalTime;
     this.currentMap = map;
     for (let i = 0; i < posGold.length; i++) {
@@ -134,7 +199,10 @@ cc.Class({
     } else if (this.ropeState == status.reduce) {
       //When shortening
       this.rope.height -= this._lengthSpeed * dt;
-      this.hook.y += this._lengthSpeed * dt;
+      cc.log(this.hook.x, this.hook.y);
+      if (this.hook.y <= this._standardRopeHeight - 25) {
+        this.hook.y += this._lengthSpeed * dt;
+      }
       this.hook.x -= this.hook.angle * this._lengthSpeed * dt;
       //When the length is less than or equal to the initial length
       if (this.rope.height <= this._standardRopeHeight) {
@@ -194,12 +262,13 @@ cc.Class({
         this._countDown();
       }, 1000);
     }
-    if (this.checkIsMapEnd()) this.nextMap();
+    // if (this.checkIsMapEnd()) this.nextMap();
   },
   nextMap() {
     this.listItems.removeAllChildren();
     if (this._totalScore >= this.currentMap.target) {
       this._currentLevel++;
+      // this.target.string = this.currentMap.target;
       this.initMap();
     } else {
       let ranking = localStorage.ranking;
@@ -216,7 +285,10 @@ cc.Class({
     }
   },
   checkIsMapEnd() {
-    if (this.listItems.children.length == 0 || this._currentTime <= 0) {
+    if (
+      (this.listItems.children.length == 0 || this._currentTime <= 0) &&
+      this.rope.height == this._standardRopeHeight
+    ) {
       return true;
     }
     return false;
@@ -287,6 +359,7 @@ cc.Class({
   update(dt) {
     this.rotateRope(dt);
     this.ropeLengthen(dt);
+    if (this.checkIsMapEnd()) this.nextMap();
     // this._time=dt
   },
 });
