@@ -110,7 +110,19 @@
     "_id": ""
   },
   {
-    "__type__": "cc.CircleCollider",
+    "__type__": "ef809AQI4RLQJYyrlHAVjps",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "type": "stone",
+    "score": 1,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PolygonCollider",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -123,18 +135,43 @@
       "x": 0,
       "y": 0
     },
-    "_radius": 24.1,
-    "_id": ""
-  },
-  {
-    "__type__": "ef809AQI4RLQJYyrlHAVjps",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "type": "stone",
+    "points": [
+      {
+        "__type__": "cc.Vec2",
+        "x": -20.9,
+        "y": -14.2
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 0.2,
+        "y": -23.8
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 17.8,
+        "y": -16.2
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 23.5,
+        "y": -2.8
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 18.3,
+        "y": 18.7
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -3,
+        "y": 24.9
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -20.6,
+        "y": 14
+      }
+    ],
     "_id": ""
   },
   {

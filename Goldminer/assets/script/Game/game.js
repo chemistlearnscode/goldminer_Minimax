@@ -207,7 +207,7 @@ cc.Class({
     } else if (this.ropeState == status.reduce) {
       //When shortening
       this.rope.height -= this._lengthSpeed * dt;
-      cc.log(this.hook.x, this.hook.y);
+      // cc.log(this.hook.x, this.hook.y);
       if (this.hook.y <= this._standardRopeHeight - 25) {
         this.hook.y += this._lengthSpeed * dt;
       }
@@ -249,7 +249,6 @@ cc.Class({
 
   onLoad() {
     // this._isRotate=true;
-    cc.log(cc.director.getCollisionManager());
     this.node.on(cc.Node.EventType.MOUSE_DOWN, this.sendHook, this);
     let manager = cc.director.getCollisionManager();
     manager.enabled = true;
@@ -347,33 +346,6 @@ cc.Class({
     }
   },
 
-  // sendHook() {
-  //     this._isRotate = false;
-  //     // this.rope.node.height += this._lengthSpeed * this._time;
-  //     // if (this.rope.node.height >= 400) {
-  //     //     this.rope.node.height -= this._lengthSpeed * this._time;
-  //     // } else if (this.rope.node.height <= this._standardRopeHeight) {
-  //     //     this.rope.node.height = this._standardRopeHeight;
-  //     //     this._isRotate = true;
-  //     //     this.isClick=false
-  //     // }
-  //     cc.tween(this.rope.node)
-  //     .to(1,{height:600})
-  //     .to(3,{height: this._standardRopeHeight})
-  //     .call(()=>{
-  //         this._isRotate = true;
-  //     })
-  //     .start()
-  //     // this._isRotate = true;
-  // },
-
-  // onCollisionEnter: function(other,self){
-  //     cc.log(self);
-  //     cc.log('hi');
-  //     cc.log(other);
-  //     this.ropeState= status.reduce;
-  //     // this.originPosY = this.node.y;
-  // },
   controlMusic() {
     this.music.pause();
   },
@@ -386,8 +358,5 @@ cc.Class({
     if (this.checkIsMapEnd()) return;
     this.rotateRope(dt);
     this.ropeLengthen(dt);
-    // this.totalScore.string = Math.floor(this._totalScore);
-    // if (this.checkIsMapEnd()) this.nextMap();
-    // this._time=dt
   },
 });

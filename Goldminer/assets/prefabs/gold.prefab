@@ -110,7 +110,19 @@
     "_id": ""
   },
   {
-    "__type__": "cc.CircleCollider",
+    "__type__": "ef809AQI4RLQJYyrlHAVjps",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "type": "gold",
+    "score": 1,
+    "_id": ""
+  },
+  {
+    "__type__": "cc.PolygonCollider",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -123,18 +135,53 @@
       "x": 0,
       "y": 0
     },
-    "_radius": 42,
-    "_id": ""
-  },
-  {
-    "__type__": "ef809AQI4RLQJYyrlHAVjps",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "type": "gold",
+    "points": [
+      {
+        "__type__": "cc.Vec2",
+        "x": 8,
+        "y": -46
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 25,
+        "y": -39
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 47,
+        "y": -6
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 47,
+        "y": 17
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 34,
+        "y": 42
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -14,
+        "y": 46
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -33,
+        "y": 20
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -46,
+        "y": -6
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -23,
+        "y": -30
+      }
+    ],
     "_id": ""
   },
   {
