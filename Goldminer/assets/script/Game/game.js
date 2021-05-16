@@ -262,10 +262,14 @@ cc.Class({
         this._countDown();
       }, 1000);
     }
-    // if (this.checkIsMapEnd()) this.nextMap();
+    if (this.checkIsMapEnd()) this.nextMap();
   },
   nextMap() {
     this.listItems.removeAllChildren();
+    // this.ropeState = status.rotateRope;
+    this.rope.height = this._standardRopeHeight;
+    this.hook.x = this.hook.angle * this.rope.height;
+    this.hook.y = -this.rope.height - 10;
     if (this._totalScore >= this.currentMap.target) {
       this._currentLevel++;
       // this.target.string = this.currentMap.target;
@@ -285,10 +289,7 @@ cc.Class({
     }
   },
   checkIsMapEnd() {
-    if (
-      (this.listItems.children.length == 0 || this._currentTime <= 0) &&
-      this.rope.height == this._standardRopeHeight
-    ) {
+    if (this.listItems.children.length == 0 || this._currentTime <= 0) {
       return true;
     }
     return false;
@@ -357,9 +358,10 @@ cc.Class({
   },
 
   update(dt) {
+    if (this.checkIsMapEnd()) return;
     this.rotateRope(dt);
     this.ropeLengthen(dt);
-    if (this.checkIsMapEnd()) this.nextMap();
+    // if (this.checkIsMapEnd()) this.nextMap();
     // this._time=dt
   },
 });
