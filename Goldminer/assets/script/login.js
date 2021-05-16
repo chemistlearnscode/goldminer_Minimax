@@ -27,32 +27,18 @@ cc.Class({
     //         this._bar = value;
     //     }
     // },
-    rankItem: cc.Prefab,
-    listContent: cc.Node,
+    username: cc.EditBox,
+    // listContent: cc.Node,
   },
 
   // LIFE-CYCLE CALLBACKS:
 
-  onLoad() {
-    this.renderData();
-  },
+  onLoad() {},
 
   start() {},
-  renderData() {
-    let listData = localStorage.ranking;
-    let itemheight = 50;
-    if (listData) {
-      listData = JSON.parse(listData);
-      listData = listData.sort((x, y) => (+x.score > +y.score ? -1 : 1));
-      listData.forEach((item, i) => {
-        console.log(item);
-        let object = cc.instantiate(this.rankItem);
-        object.getComponent("rankItem").setData(item);
-        object.y = -100 - i * itemheight;
-        this.listContent.addChild(object);
-      });
-      this.listContent.height = listData.length * itemheight + 100;
-    }
+  submit() {
+    const username = this.username.string;
+    window.username = username;
+    cc.director.loadScene("game");
   },
-  // update (dt) {},
 });

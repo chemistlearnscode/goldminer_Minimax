@@ -8,176 +8,285 @@
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
-const status={
-    rotate: 0,
-    add: 1,
-    reduce: 2,
-}
+const status = {
+  rotate: 0,
+  add: 1,
+  reduce: 2,
+};
 
-const Emitter = require('mEmitter');
+const map1 = {
+  posGold: [
+    { x: 1, y: 2, score: 100, scale: 1 },
+    { x: 100, y: -300, score: 100, scale: 0.5 },
+  ],
+  posDiamond: [
+    { x: 100, y: 200, score: 100, scale: 2 },
+    { x: -100, y: -100, score: 100, scale: 3 },
+  ],
+  posStone: [
+    { x: -300, y: -200, score: 100, scale: 3 },
+    { x: 150, y: -100, score: 100, scale: 4 },
+  ],
+  target: 100,
+  totalTime: 15,
+};
+const map2 = {
+  posGold: [
+    { x: 1, y: 200, score: 100, scale: 1 },
+    { x: 100, y: -300, score: 100, scale: 0.5 },
+  ],
+  posDiamond: [
+    { x: 100, y: 200, score: 100, scale: 2 },
+    { x: -100, y: -100, score: 100, scale: 3 },
+  ],
+  posStone: [
+    { x: -300, y: -200, score: 100, scale: 3 },
+    { x: 150, y: -100, score: 100, scale: 4 },
+  ],
+  target: 300,
+  totalTime: 10,
+};
+const Emitter = require("mEmitter");
 
 cc.Class({
-    extends: cc.Component,
+  extends: cc.Component,
 
-    properties: {
-        rope: cc.Node,
-        gold: cc.Prefab,
-        diamond: cc.Prefab,
-        rock: cc.Prefab,
-        hook:cc.Node,
-        _isRotate: true,
-        _rotateSpeed:  {
-            default:60,
-            serializable: false,
-        },
-        _lengthSpeed: {
-            default:100,
-            serializable: false,
-        },
-        _standardRopeHeight:  {
-            default:50,
-            serializable: false,
-        },
-        _x:0,
-        _y:0,
-        // _iswaitState:false,
-        // _time:0
+  properties: {
+    rope: cc.Node,
+    gold: cc.Prefab,
+    diamond: cc.Prefab,
+    stone: cc.Prefab,
+    hook: cc.Node,
+    listItems: cc.Node,
+    _currentItem: cc.Node,
+    timer: cc.ProgressBar,
+    _totalScore: (cc.Float = 0),
+    totalScore: cc.Label,
+    _isRotate: true,
+    _rotateSpeed: {
+      default: 60,
+      serializable: false,
     },
+    _lengthSpeed: {
+      default: 200,
+      serializable: false,
+    },
+    _standardRopeHeight: {
+      default: 50,
+      serializable: false,
+    },
+    _x: 0,
+    _y: 0,
+    _currentLevel: (cc.Float = 1),
+    _currentTime: cc.Float,
+    // _iswaitState:false,
+    // _time:0
+  },
 
-    ropeLengthen(dt){
-        //When it becomes longer
-    if (this.ropeState == status.add) {
-        this.rope.height += this._lengthSpeed * dt;
-        this.hook.x+=this.hook.angle*this._lengthSpeed * dt
-        this.hook.y-= this._lengthSpeed * dt
-        this._x=this.hook.angle*this._lengthSpeed * dt
-        this._y= this._lengthSpeed * dt
-        if((this.rope.height>=500)&&(Math.abs(this.hook.x)>=Math.abs(this.hook.angle*500))){
-            // this._isRotate = true;
-            this.ropeState = status.reduce;
-            // cc.log(this.rope);
-        }
-    } else if (this.ropeState == status.reduce) {
-                 //When shortening
-        this.rope.height -= this._lengthSpeed * dt;
-        this.hook.y+=this._lengthSpeed * dt;
-        this.hook.x-=this.hook.angle*this._lengthSpeed * dt;
-                 //When the length is less than or equal to the initial length
-        if (this.rope.height <= this._standardRopeHeight) {
-                         //The rope starts spinning again
-            this._isRotate = true;
-                         //Reset various attributes
-            this.ropeState = status.rotate;
-            this.rope.height = this._standardRopeHeight;
-            this.node.angle = 0;
-            // this.rotateSpeed = 100;
-        }
+  initMap() {
+    var map;
+    switch (this._currentLevel) {
+      case 1:
+        map = map1;
+        break;
+      case 2:
+        map = map2;
+        break;
+      default:
+        break;
     }
-    },
-
-    rotateRope(dt) {
-        if (!this._isRotate) {
-            return;
+    const { posGold, posDiamond, posStone, totalTime } = map;
+    this._currentTime = totalTime;
+    this.currentMap = map;
+    for (let i = 0; i < posGold.length; i++) {
+      let gold = cc.instantiate(this.gold);
+      this.listItems.addChild(gold);
+      gold.getComponent("item").setData(posGold[i]);
+    }
+    for (let i = 0; i < posDiamond.length; i++) {
+      let diamond = cc.instantiate(this.diamond);
+      this.listItems.addChild(diamond);
+      diamond.getComponent("item").setData(posDiamond[i]);
+    }
+    for (let i = 0; i < posStone.length; i++) {
+      let stone = cc.instantiate(this.stone);
+      this.listItems.addChild(stone);
+      stone.getComponent("item").setData(posStone[i]);
+    }
+    this._countDown();
+  },
+  ropeLengthen(dt) {
+    //When it becomes longer
+    if (this.ropeState == status.add) {
+      this.rope.height += this._lengthSpeed * dt;
+      this.hook.x += this.hook.angle * this._lengthSpeed * dt;
+      this.hook.y -= this._lengthSpeed * dt;
+      this._x = this.hook.x;
+      this._y = this.hook.y;
+      if (
+        this.rope.height >= 500 &&
+        Math.abs(this.hook.x) >= Math.abs(this.hook.angle * 500)
+      ) {
+        // this._isRotate = true;
+        this.ropeState = status.reduce;
+        // cc.log(this.rope);
+      }
+    } else if (this.ropeState == status.reduce) {
+      //When shortening
+      this.rope.height -= this._lengthSpeed * dt;
+      this.hook.y += this._lengthSpeed * dt;
+      this.hook.x -= this.hook.angle * this._lengthSpeed * dt;
+      //When the length is less than or equal to the initial length
+      if (this.rope.height <= this._standardRopeHeight) {
+        //The rope starts spinning again
+        this._isRotate = true;
+        //Reset various attributes
+        this.ropeState = status.rotate;
+        this.rope.height = this._standardRopeHeight;
+        this.node.angle = 0;
+        // console.log(this.rope.height );
+        if (this._currentItem) {
+          this._currentItem.active = false;
+          this._totalScore += this._currentItem.getComponent("item").getScore();
+          this._currentItem.destroy();
+          this._currentItem = null;
+          this.totalScore.string = this._totalScore;
         }
-        if (this.rope.angle >= 85) {
-            this._rotateSpeed = -this._rotateSpeed;
-        } else if (this.rope.angle <= -85) {
-            this._rotateSpeed = Math.abs(this._rotateSpeed);
-        }
-        this.rope.angle += this._rotateSpeed * dt;
-    },
 
+        // this.rotateSpeed = 100;
+      }
+    }
+  },
 
+  rotateRope(dt) {
+    if (!this._isRotate) {
+      return;
+    }
+    if (this.rope.angle >= 85) {
+      this._rotateSpeed = -this._rotateSpeed;
+    } else if (this.rope.angle <= -85) {
+      this._rotateSpeed = Math.abs(this._rotateSpeed);
+    }
+    this.rope.angle += this._rotateSpeed * dt;
+  },
 
-    // LIFE-CYCLE CALLBACKS:
+  // LIFE-CYCLE CALLBACKS:
 
-    onLoad() {
-        // this._isRotate=true;
-        cc.log( cc.director.getCollisionManager())
-        this.node.on(cc.Node.EventType.MOUSE_DOWN, this.sendHook, this);
-        let manager = cc.director.getCollisionManager();
-        manager.enabled = true;
-        manager.enabledDebugDraw = true;
-        Emitter.instance = new Emitter();
-        Emitter.instance.registerEvent("withdrawRope", this.withdrawRope.bind(this))
-    },
+  onLoad() {
+    // this._isRotate=true;
+    cc.log(cc.director.getCollisionManager());
+    this.node.on(cc.Node.EventType.MOUSE_DOWN, this.sendHook, this);
+    let manager = cc.director.getCollisionManager();
+    manager.enabled = true;
+    manager.enabledDebugDraw = true;
+    Emitter.instance = new Emitter();
+    Emitter.instance.registerEvent(
+      "withdrawRope",
+      this.withdrawRope.bind(this)
+    );
+    this.initMap();
+  },
+  _countDown() {
+    this._currentTime -= 1;
+    this.timer.progress = this._currentTime / this.currentMap.totalTime;
+    if (this._currentTime > 0) {
+      setTimeout(() => {
+        this._countDown();
+      }, 1000);
+    }
+    if (this.checkIsMapEnd()) this.nextMap();
+  },
+  nextMap() {
+    this.listItems.removeAllChildren();
+    if (this._totalScore >= this.currentMap.target) {
+      this._currentLevel++;
+      this.initMap();
+    } else {
+      let ranking = localStorage.ranking;
+      if (!ranking) {
+        ranking = [];
+      } else {
+        ranking = JSON.parse(ranking);
+      }
+      ranking.push({ username: window.username, score: this._totalScore });
+      localStorage.ranking = JSON.stringify(ranking);
 
-    withdrawRope(node){
-        this.takeItem(node);
-        this.ropeState= status.reduce;
-    },
+      //hien popup thua
+      console.log("thua");
+    }
+  },
+  checkIsMapEnd() {
+    if (this.listItems.children.length == 0 || this._currentTime <= 0) {
+      return true;
+    }
+    return false;
+  },
 
-    takeItem(node){
-        if(node.group=="gold"){
-            cc.tween(node)
-            .to(2,{x:-1.4,y:106})
-            .call(()=>{
-                node.active=false
-            })
-            .start()
-        } else if(node.group=="diamond"){
-            cc.tween(node)
-            .to(2,{x:-1.4,y:106},{opacity:0})
-            .call(()=>{
-                node.active=false
-            })
-            .start()
-        } else if (node.group=="stone"){
-            cc.tween(node)
-            .to(2,{x:-1.4,y:106},{opacity:0})
-            .call(()=>{
-                node.active=false
-            })
-            .start()
-        }
-    },
+  withdrawRope(node) {
+    this.takeItem(node);
+    this.ropeState = status.reduce;
+  },
 
-    sendHook(){
-        this._isRotate = false;
-        // if (this.ropeState == status.add&&this.rope.node.height>=600) {
-        //     this.ropeState = status.reduce;
-        // }
-             // Click while the rope is waiting, the rope will switch to the variable length state
-        if (this.ropeState == status.rotate) {
-            this.ropeState = status.add;
-        }
-    },
+  takeItem(node) {
+    switch (node.group) {
+      case "gold":
+      case "diamond":
+      case "stone":
+        node.x = 0;
+        node.y = 0;
+        node.parent = this.hook;
+        // node.active = false;
+        this._currentItem = node;
+        break;
+    }
+  },
 
-    // sendHook() {
-    //     this._isRotate = false;
-    //     // this.rope.node.height += this._lengthSpeed * this._time;
-    //     // if (this.rope.node.height >= 400) {
-    //     //     this.rope.node.height -= this._lengthSpeed * this._time;
-    //     // } else if (this.rope.node.height <= this._standardRopeHeight) {
-    //     //     this.rope.node.height = this._standardRopeHeight;
-    //     //     this._isRotate = true;
-    //     //     this.isClick=false
-    //     // }
-    //     cc.tween(this.rope.node)
-    //     .to(1,{height:600})
-    //     .to(3,{height: this._standardRopeHeight})
-    //     .call(()=>{
-    //         this._isRotate = true;
-    //     })
-    //     .start()
-    //     // this._isRotate = true;
-    // },
+  sendHook() {
+    this._isRotate = false;
+    // if (this.ropeState == status.add&&this.rope.node.height>=600) {
+    //     this.ropeState = status.reduce;
+    // }
+    // Click while the rope is waiting, the rope will switch to the variable length state
+    if (this.ropeState == status.rotate) {
+      this.ropeState = status.add;
+    }
+  },
 
-    // onCollisionEnter: function(other,self){
-    //     cc.log(self);
-    //     cc.log('hi');
-    //     cc.log(other);
-    //     this.ropeState= status.reduce;
-    //     // this.originPosY = this.node.y;
-    // }, 
+  // sendHook() {
+  //     this._isRotate = false;
+  //     // this.rope.node.height += this._lengthSpeed * this._time;
+  //     // if (this.rope.node.height >= 400) {
+  //     //     this.rope.node.height -= this._lengthSpeed * this._time;
+  //     // } else if (this.rope.node.height <= this._standardRopeHeight) {
+  //     //     this.rope.node.height = this._standardRopeHeight;
+  //     //     this._isRotate = true;
+  //     //     this.isClick=false
+  //     // }
+  //     cc.tween(this.rope.node)
+  //     .to(1,{height:600})
+  //     .to(3,{height: this._standardRopeHeight})
+  //     .call(()=>{
+  //         this._isRotate = true;
+  //     })
+  //     .start()
+  //     // this._isRotate = true;
+  // },
 
-    start() {
-        this.ropeState=status.rotate;
-    },
+  // onCollisionEnter: function(other,self){
+  //     cc.log(self);
+  //     cc.log('hi');
+  //     cc.log(other);
+  //     this.ropeState= status.reduce;
+  //     // this.originPosY = this.node.y;
+  // },
 
-    update(dt) {
-        this.rotateRope(dt);
-        this.ropeLengthen(dt);
-        // this._time=dt
-    },
+  start() {
+    this.ropeState = status.rotate;
+  },
+
+  update(dt) {
+    this.rotateRope(dt);
+    this.ropeLengthen(dt);
+    // this._time=dt
+  },
 });

@@ -13,22 +13,25 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "stone-0",
+    "_name": "diamond",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
     "_active": true,
-    "_level": 2,
+    "_level": 1,
     "_components": [
       {
         "__id__": 2
       },
       {
         "__id__": 3
+      },
+      {
+        "__id__": 4
       }
     ],
     "_prefab": {
-      "__id__": 4
+      "__id__": 5
     },
     "_opacity": 255,
     "_color": {
@@ -40,8 +43,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 50,
-      "height": 52
+      "width": 34,
+      "height": 30
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -50,8 +53,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 172.029,
-      "y": -85.002,
+      "x": 0,
+      "y": 0,
       "z": 0
     },
     "_scale": {
@@ -69,7 +72,7 @@
     "_skewX": 0,
     "_skewY": 0,
     "_is3DNode": false,
-    "groupIndex": 4,
+    "groupIndex": 3,
     "_id": ""
   },
   {
@@ -88,7 +91,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "0f9248bf-3eda-4105-831e-c5188b63082b"
+      "__uuid__": "8a55d35a-7efb-47de-9369-145dedf9f524"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -107,7 +110,7 @@
     "_id": ""
   },
   {
-    "__type__": "cc.CircleCollider",
+    "__type__": "cc.PolygonCollider",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -120,7 +123,44 @@
       "x": 0,
       "y": 0
     },
-    "_radius": 24.1,
+    "points": [
+      {
+        "__type__": "cc.Vec2",
+        "x": -0.3,
+        "y": -4.4
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 13.7,
+        "y": 7.7
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": 5.8,
+        "y": 14.5
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -6.7,
+        "y": 14.3
+      },
+      {
+        "__type__": "cc.Vec2",
+        "x": -15.2,
+        "y": 9.2
+      }
+    ],
+    "_id": ""
+  },
+  {
+    "__type__": "ef809AQI4RLQJYyrlHAVjps",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "type": "diamond",
     "_id": ""
   },
   {
@@ -129,9 +169,9 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "6cf54451-4a3d-417c-a068-1cf33cac79a4"
     },
-    "fileId": "a18BmXkZZPWr3pjypUTSDX",
+    "fileId": "69obfKP0FKVb6rc+7kRegR",
     "sync": false
   }
 ]
