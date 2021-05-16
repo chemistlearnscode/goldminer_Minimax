@@ -161,6 +161,9 @@ cc.Class({
       case 5:
         map = map5;
         break;
+      case 6:
+        this.showWindow(this.winGame);
+        break;
       default:
         break;
     }
@@ -225,7 +228,6 @@ cc.Class({
           this._currentItem = null;
           this.totalScore.string = this._totalScore;
         }
-
         // this.rotateSpeed = 100;
       }
     }
@@ -384,6 +386,7 @@ cc.Class({
     if (this.checkIsMapEnd()) return;
     this.rotateRope(dt);
     this.ropeLengthen(dt);
+    // this.totalScore.string = Math.floor(this._totalScore);
     // if (this.checkIsMapEnd()) this.nextMap();
     // this._time=dt
   },
